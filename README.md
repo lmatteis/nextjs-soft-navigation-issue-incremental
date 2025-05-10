@@ -1,21 +1,21 @@
-# HTTP2 server example
+# Soft navigation on static route isn't incrementally renderer
 
-This example shows the most basic example using an HTTP2 server. We have 2 pages: `pages/index.js` and `pages/about.js`. The former responds to `/` requests and the latter to `/about`. Using `next/link` you can add hyperlinks between them with universal routing capabilities.
+I have a static route which is huge for purpose of testing incremental rendering. It's rendering a huge number (~400kb) after which it renders a text "Done!" (I'm using HTTP2 setup to allow for streaming in raw data)
 
-## How to use
+When turning off javascript (getting the raw HTML) behavior is as expected. Number is shown and "Foo" route appears streamed in after which the "Done!" text appears (simulating 4g connection). Meaning I can see the top content immediately as the number streams in:
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+https://github.com/user-attachments/assets/33ecf892-3dbd-44a6-b7aa-23ad00c7d7cb
+
+With javascript on however, using soft navigation, this doesn't happen. The entire page just hangs there without the header text changing or the number changing. And it all appears at the end - all at once:
+
+https://github.com/user-attachments/assets/31b80693-9d16-467b-b26c-bf6ea6523705
+
+Note that this has nothing to do with Suspense streaming. It's just standard browser HTTP transfer and HTML rendering at play. My feeling is that the soft navigation uses the RSC streaming format, which is received in chunks (via HTTP2), but doesn't know what to render and when to render it... while HTML+browser knows better how to incrementally render things even if it doesn't have a complete tree yet.
+
+Thoughts?
 
 ```bash
-npx create-next-app --example with-http2 with-http2-app
-```
-
-```bash
-yarn create next-app --example with-http2 with-http2-app
-```
-
-```bash
-pnpm create next-app --example with-http2 with-http2-app
+npm i
 ```
 
 Create the public and private keys:
@@ -25,4 +25,6 @@ openssl req -x509 -newkey rsa:2048 -nodes -sha256 -subj '/CN=localhost' \
   -keyout localhost-privkey.pem -out localhost-cert.pem
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+```
+npm run dev
+```
