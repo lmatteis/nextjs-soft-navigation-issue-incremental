@@ -1,4 +1,4 @@
-# Soft navigation on static route isn't incrementally renderer
+# Soft navigation on large page isn't incrementally renderer
 
 I have a static route which is huge for purpose of testing incremental rendering. It's rendering a huge number (~400kb) after which it renders a text "Done!" (I'm using HTTP2 setup to allow for streaming in raw data)
 
