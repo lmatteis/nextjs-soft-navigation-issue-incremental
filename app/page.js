@@ -12,9 +12,7 @@ export default async function Page() {
 
   return (
     <div className="mt-8 rounded-lg bg-gray-800 p-4">
-      <h2 className="mb-2 text-lg font-semibold text-gray-300">
-        Large Number (400KB):
-      </h2>
+      <h2 className="mb-2 text-lg font-semibold text-gray-300">Home</h2>
       <pre className="max-h-96 overflow-auto text-xs text-gray-400">
         {largeNumber}
         {largeNumber}
