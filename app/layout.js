@@ -15,10 +15,6 @@ export default function RootLayout({ children }) {
         -{" "}
         <Link href="/foo" prefetch={false}>
           Foo
-        </Link>{" "}
-        -{" "}
-        <Link href="/bar" prefetch={false}>
-          Bar
         </Link>
         {children}
       </body>
